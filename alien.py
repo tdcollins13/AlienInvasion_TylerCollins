@@ -31,11 +31,14 @@ class Alien(Sprite):
     def update(self):
         temp_speed = self.settings.fleet_speed
 
+        # Causes the alien to bounce back 
         if self.check_edges():
             self.settings.fleet_direction *= -1
+            self.y += self.settings.fleet_drop_speed   # Causes aliens to go down
 
         self.x += temp_speed * self.settings.fleet_direction
         self.rect.x = self.x
+        self.rect.y = self.y                           # Alien goes down
 
     def check_edges(self):
         return(self.rect.right >= self.boundries.right or self.rect.left <= self.boundries.left)
