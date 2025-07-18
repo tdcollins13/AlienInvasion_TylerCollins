@@ -3,6 +3,7 @@ import pygame
 from settings import Settings 
 from ship import Ship
 from arsenal import Arsenal 
+from alien import Alien
 
 class AlienInvasion:
     
@@ -29,6 +30,7 @@ class AlienInvasion:
 
         # Game Features: pieces etc.
         self.ship = Ship(self, Arsenal(self))
+        self.alien = Alien(self, 10, 10)
 
 
 
@@ -37,12 +39,14 @@ class AlienInvasion:
          while self.running:
              self._check_events()
              self.ship.update()
+             self.alien.update()
              self._update_screen()
              self.clock.tick(self.settings.FPS) 
 
     def _update_screen(self):
         self.screen.blit(self.bg, (0,0))
         self.ship.draw()
+        self.alien.draw_alien()
         pygame.display.flip()
 
     def _check_events(self):
