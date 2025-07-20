@@ -17,15 +17,17 @@ class Ship:
             (self.settings.ship_w, self.settings.ship_h)
             )
         
-        self.image = pygame.transform.rotate(self.image, -90)
+        # self.image = pygame.transform.rotate(self.image, -90)
 
         self.rect = self.image.get_rect()
-        self.rect.midleft = self.boundries.midleft
-        self.y = float(self.rect.y)
-        self.moving_up = False 
-        self.moving_down = False
-        self.x = float(self.rect.x)
+        self._center_ship()
+        self.moving_left = False 
+        self.moving_right = False
         self.arsenal  = arsenal
+
+    def _center_ship(self):
+        self.rect.midbottom = self.boundries.midbottom
+        self.x = float(self.rect.x)
 
     def update(self):
          # updating the position of the ship
@@ -34,12 +36,12 @@ class Ship:
 
     def _update_ship_movement(self):
         temp_speed = self.settings.ship_speed
-        if self.moving_up and self.rect.top > self.boundries.top: 
-             self.y -= temp_speed
-        if self.moving_down and self.rect.bottom < self.boundries.bottom:
-             self.y += temp_speed
+        if self.moving_left and self.rect.left > 0: 
+             self.x -= temp_speed
+        if self.moving_right and self.rect.right < self.boundries.right:
+             self.x += temp_speed
 
-        self.rect.y = self.y 
+        self.rect.x = self.x 
        
     def draw(self):
             self.arsenal.draw()
@@ -47,4 +49,12 @@ class Ship:
 
     def fire(self):
          return self.arsenal.fire_bullet()
+    
+    def check_collisions(self, other_group):
+         if pygame.sprite.spritecollideany(self, other_group):
+              self._center_ship()
+              return True
+         return False
+    
+
 
