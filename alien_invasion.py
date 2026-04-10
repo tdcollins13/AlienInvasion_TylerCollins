@@ -5,9 +5,21 @@ from ship import Ship
 from arsenal import Arsenal
 
 class AlienInvasion:
+    """Overall class to manage game assets and behavior."""
     
     def __init__(self):
-        """"Intialize game and draw screen"""
+        """"Intialize game and all core components
+        
+        Sets Up: 
+            - Pygame
+            - Game Settings
+            - Screen display
+            - Background image
+            - Game loop control
+            - Frame rate control(game clock)
+            - Ship
+            - Sound effects
+        """
         pygame.init()
         self.settings = Settings()
 
@@ -32,7 +44,10 @@ class AlienInvasion:
 
 
     def run_game(self):
-        #Game loop
+        """Start the main game loop
+        
+        processes user input, updates game state,
+        """
         while self.running:
             #call event listener function
             self._check_events()
@@ -44,6 +59,11 @@ class AlienInvasion:
 
 
     def _update_screen(self):
+        """Render the current frame to the display.
+
+        Draws the background image, renders the ship, and updates the display
+        using double buffering to present the latest frame.
+        """
         #draw background image to screen
         self.screen.blit(self.bg, (0, 0))
         #draw ship to screen and update display    
@@ -65,6 +85,7 @@ class AlienInvasion:
                 self._check_keyup_events(event)
     
     def _check_keydown_events(self, event):
+        """Responds to keypresses for movement and firing actions."""
         if event.key == pygame.K_RIGHT:
             self.ship.moving_right = True
         elif event.key == pygame.K_LEFT:
@@ -82,6 +103,8 @@ class AlienInvasion:
             sys.exit()
             
     def _check_keyup_events(self, event):
+        """Responds to key releases. Stopping movement when arrow keys are released."""
+
         if event.key == pygame.K_RIGHT:
             self.ship.moving_right = False
         elif event.key == pygame.K_LEFT:
