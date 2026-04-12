@@ -46,6 +46,7 @@ class AlienInvasion:
         # Game Loop
         while self.running == True:
             self._check_events()
+            self.ship.update()
             self._update_screen()
             self.clock.tick(self.settings.FPS)
 
@@ -56,12 +57,39 @@ class AlienInvasion:
                 self.running: bool = False
                 pygame.quit()
                 sys.exit()
+            # Check events for when a key is pressed
+            elif event.type == pygame.KEYDOWN:
+                self._check_keydown_events(event)
+            # Check events for when a key is released
+            elif event.type == pygame.KEYUP:
+                self._check_keyup_events(event)
     
     def _update_screen(self):
         # Render updated frame/image of game state at desired FPS
         self.screen.blit(self.bg, (0,0))
         self.ship.draw()
         pygame.display.flip()
+
+    def _check_keydown_events(self, event):
+        # Ship moves up when up arrow key is pressed
+        if event.key == pygame.K_UP:
+            self.ship.moving_up = True
+        # Ship moves down when down arrow key is pressed
+        elif event.key == pygame.K_DOWN:
+            self.ship.moving_down = True
+        # Ends game and closes game window when 'Q' key is pressed
+        elif event.key == pygame.K_q:
+            self.running = False
+            pygame.quit()
+            sys.exit()
+
+    def _check_keyup_events(self, event):
+        # Ship stops moving up when up arrow key is released
+        if event.key == pygame.K_UP:
+            self.ship.moving_up = False
+        # Ship stops moving down when down arrow key is released
+        elif event.key == pygame.K_DOWN:
+            self.ship.moving_down = False
 
 
 

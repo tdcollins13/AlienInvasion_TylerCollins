@@ -22,9 +22,11 @@ class Settings:
         frames per second
         bg_file (Path): Path leading to the image file used as the background of
         the game window
+
         ship_file (Path): Path leading to the image file used as the ship/player
         ship_w (int): The relative width of the ship/player object on the game screen
         ship_h (int): The relative height of the ship/player object on the game screen
+        ship_speed (int): The speed of the ship/player when moving up or down
     """
 
     def __init__(self):
@@ -40,3 +42,4 @@ class Settings:
         self.ship_file: Path = Path.cwd() / 'Assets' / 'images' / 'ship2(no bg).png'
         self.ship_w: int = 40
         self.ship_h: int = 60
+        self.ship_speed: int = 3
