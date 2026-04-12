@@ -13,16 +13,18 @@ set of assets provided by GitHub user RedBeard41.
 import sys
 import pygame
 from settings import Settings
+from ship import Ship
 
 class AlienInvasion:
     """Represents the AlienInvasion game
 
     Attributes:
         settings (Settings): Predefined specifications used to generate the game
-        screen : The screen/window generated to display the game
-        bg : The image used as the background of the game screen
+        screen (Surface): The screen/window generated to display the game
+        bg (Surface): The image used as the background of the game screen
         running (bool): Indicates whether or not the game is currently running
-        clock : Tracks the progression of time while the game is running
+        clock (Clock): Tracks the progression of time while the game is running
+        ship (Ship): The ship/player object being used in the game
     """
 
     def __init__(self):
@@ -38,6 +40,7 @@ class AlienInvasion:
             )
         self.running: bool = True
         self.clock = pygame.time.Clock()
+        self.ship = Ship(self)
     
     def run_game(self):
         # Game Loop
@@ -50,8 +53,9 @@ class AlienInvasion:
                     pygame.quit()
                     sys.exit()
 
-            # Render updated frame/image at desired FPS
+            # Render updated frame/image of game state at desired FPS
             self.screen.blit(self.bg, (0,0))
+            self.ship.draw()
             pygame.display.flip()
             self.clock.tick(self.settings.FPS)
 
