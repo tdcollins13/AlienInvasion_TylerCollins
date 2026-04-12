@@ -45,19 +45,25 @@ class AlienInvasion:
     def run_game(self):
         # Game Loop
         while self.running == True:
-            for event in pygame.event.get():
-
-                # Ends game when game window is closed
-                if event.type == pygame.QUIT:
-                    self.running: bool = False
-                    pygame.quit()
-                    sys.exit()
-
-            # Render updated frame/image of game state at desired FPS
-            self.screen.blit(self.bg, (0,0))
-            self.ship.draw()
-            pygame.display.flip()
+            self._check_events()
+            self._update_screen()
             self.clock.tick(self.settings.FPS)
+
+    def _check_events(self):
+        for event in pygame.event.get():
+            # Ends game when game window is closed
+            if event.type == pygame.QUIT:
+                self.running: bool = False
+                pygame.quit()
+                sys.exit()
+    
+    def _update_screen(self):
+        # Render updated frame/image of game state at desired FPS
+        self.screen.blit(self.bg, (0,0))
+        self.ship.draw()
+        pygame.display.flip()
+
+
 
 # AlienInvasion game initialized when program is run
 if __name__ == '__main__':
