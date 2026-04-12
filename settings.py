@@ -1,12 +1,13 @@
 """
 File Name: settings.py
 Author: Tyler D. Collins
-Date: 4/11/2026
+Date: 4/12/2026
 
 Purpose: The purpose of this file is to create the Settings class/module that 
 contains a set of specifications to be used in the creation of the 
 AlienInvasion game.
 """
+
 # Import Necessary Modules
 from pathlib import Path
 
@@ -20,13 +21,27 @@ class Settings:
         screen_h (int): The relative height of the game screen/window
         FPS (int): The speed at which new frames for the game are drawn, in 
         frames per second
-        bg_file (Path): Path leading to the image file used as the background of
-        the game window
+        bg_file (Path): Path of the image file used as the background of the 
+        game window
 
-        ship_file (Path): Path leading to the image file used as the ship/player
-        ship_w (int): The relative width of the ship/player object on the game screen
-        ship_h (int): The relative height of the ship/player object on the game screen
+        ship_file (Path): Path of to the image file used as the ship/player
+        ship_w (int): The relative width of the ship/player object on the game 
+        screen
+        ship_h (int): The relative height of the ship/player object on the game 
+        screen
         ship_speed (int): The speed of the ship/player when moving up or down
+
+        bullet_file (Path): Path of the image file used as the bullets/
+        lasers fired by the ship/player
+        laser_sound (Path): Path of the audio file used for ship laser fire
+        bullet_speed (int): The speed of a bullet/laser when moving across the 
+        screen
+        bullet_w (int): The relative width of the bullet/laser object on the 
+        game screen
+        bullet_h (int): The relative height of the bullet/laser object on the 
+        game screen
+        bullet_amount (int): The maximum number of bullets/lasers the 
+        ship/player can have in their arsenal at any time
     """
 
     def __init__(self):
@@ -43,3 +58,11 @@ class Settings:
         self.ship_w: int = 40
         self.ship_h: int = 60
         self.ship_speed: int = 3
+
+        # Bullet settings
+        self.bullet_file: Path = Path.cwd() / 'Assets' / 'images' / 'laserBlast.png'
+        self.laser_sound: Path = Path.cwd() / 'Assets' / 'sound' / 'laser.mp3'
+        self.bullet_speed: int = 7
+        self.bullet_w: int = 25
+        self.bullet_h: int = 80
+        self.bullet_amount: int = 5

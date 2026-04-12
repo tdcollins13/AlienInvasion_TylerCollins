@@ -1,7 +1,7 @@
 """
 File Name: alien_invasion.py
 Author: Tyler D. Collins
-Date: 4/11/2026
+Date: 4/12/2026
 
 Purpose: This program is the main file in the 'AlienInvasion_TylerCollins'
 repository, which contains the code that runs a complete 2D game using Pygame. 
@@ -14,12 +14,14 @@ import sys
 import pygame
 from settings import Settings
 from ship import Ship
+from arsenal import Arsenal
 
 class AlienInvasion:
     """Represents the AlienInvasion game
 
     Attributes:
-        settings (Settings): Predefined specifications used to generate the game
+        settings (Settings): Module of predefined specifications used to 
+        generate the game
         screen (Surface): The screen/window generated to display the game
         bg (Surface): The image used as the background of the game screen
         running (bool): Indicates whether or not the game is currently running
@@ -28,6 +30,8 @@ class AlienInvasion:
     """
 
     def __init__(self):
+
+        # Initialize game screen/window
         pygame.init()
         self.settings = Settings()
         self.screen = pygame.display.set_mode(
@@ -40,7 +44,14 @@ class AlienInvasion:
             )
         self.running: bool = True
         self.clock = pygame.time.Clock()
-        self.ship = Ship(self)
+
+        # Initialize ship/player object
+        self.ship = Ship(self, Arsenal(self))
+
+        # Set up sound for laser fire
+        pygame.mixer.init()
+        self.laser_sound = pygame.mixer.Sound(self.settings.laser_sound)
+        self.laser_sound.set_volume(0.7)
     
     def run_game(self):
         # Game Loop
@@ -71,12 +82,17 @@ class AlienInvasion:
         pygame.display.flip()
 
     def _check_keydown_events(self, event):
-        # Ship moves up when up arrow key is pressed
+        # Ship moves up when 'up' arrow key is pressed
         if event.key == pygame.K_UP:
             self.ship.moving_up = True
-        # Ship moves down when down arrow key is pressed
+        # Ship moves down when 'down' arrow key is pressed
         elif event.key == pygame.K_DOWN:
             self.ship.moving_down = True
+        # Ship fires laser w/ sound when 'spacebar' is pressed
+        elif event.key == pygame.K_SPACE:
+            if self.ship.fire():
+                self.laser_sound.play()
+                self.laser_sound.fadeout(250)
         # Ends game and closes game window when 'Q' key is pressed
         elif event.key == pygame.K_q:
             self.running = False
