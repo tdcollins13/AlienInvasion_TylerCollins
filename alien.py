@@ -4,7 +4,8 @@ Author: Tyler D. Collins
 Date: 4/18/2026
 
 Purpose: The purpose of this file is to creat the Alien class/module that 
-defines how the aliens in the alien fleet are generated, 
+defines how the aliens in the alien fleet are generated, their position and 
+their movement behavior.
 """
 
 # Import Necessary Modules w/ workaround for circular imports
@@ -22,11 +23,14 @@ class Alien(Sprite):
         Sprite (Sprite): Represents a group of alien objects
 
     Attributes:
-        screen (Surface):
-        boundaries (Rect):
-        settings (Settings):
-        image (Surface):
-        rect (Rect):
+        screen (Surface): The image/space of the game screen
+        boundaries (Rect): Coordinates/dimensions of the game screen boundaries
+        settings (Settings): Module of predefined specifications used to create 
+        the alien(s)
+        image (Surface): The on-screen image of an individual alien
+        rect (Rect): Coordinates/dimensions of the alien image
+        y_coord (int): 'y' coordinate on game screen of top left corner of alien
+        x_coord (int): 'x' coordinate on game screen of top left corner of alien
     """
     def __init__(self, game: 'AlienInvasion', x: float, y: float):
         
@@ -42,14 +46,19 @@ class Alien(Sprite):
             (self.settings.alien_w, self.settings.alien_h)
             )
         
-        # Alien positioned at top of game screen's right edge at game start
+        # 'First' alien in alien fleet positioned at top of game screen's right 
+        # edge at game start
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
-        #self.y = float(self.rect.y)
+        self.y_coord = int(self.rect.y)
+        self.x_coord = int(self.rect.x)
 
     def update(self):
-        pass
+        # Updating alien movement
+        temp_speed = self.settings.fleet_speed
+        self.y_coord += temp_speed
+        self.rect.y = self.y_coord
 
     def draw_alien(self):
         # Draw alien image to game screen
