@@ -1,7 +1,7 @@
 """
 File Name: alien_invasion.py
 Author: Tyler D. Collins
-Date: 4/12/2026
+Date: 4/18/2026
 
 Purpose: This program is the main file in the 'AlienInvasion_TylerCollins'
 repository, which contains the code that runs a complete 2D game using Pygame. 
@@ -15,6 +15,7 @@ import pygame
 from settings import Settings
 from ship import Ship
 from arsenal import Arsenal
+from alien import Alien
 
 class AlienInvasion:
     """Represents the AlienInvasion game
@@ -27,6 +28,7 @@ class AlienInvasion:
         running (bool): Indicates whether or not the game is currently running
         clock (Clock): Tracks the progression of time while the game is running
         ship (Ship): The ship/player object being used in the game
+        alien (Alien): 
     """
 
     def __init__(self):
@@ -45,8 +47,11 @@ class AlienInvasion:
         self.running: bool = True
         self.clock = pygame.time.Clock()
 
-        # Initialize ship/player object
+        # Initialize ship/player object & alien
         self.ship = Ship(self, Arsenal(self))
+        self.alien = Alien(self, 
+            (self.settings.screen_w - self.settings.alien_w - 10), 10
+            )
 
         # Set up sound for laser fire
         pygame.mixer.init()
@@ -58,6 +63,7 @@ class AlienInvasion:
         while self.running == True:
             self._check_events()
             self.ship.update()
+            self.alien.update()
             self._update_screen()
             self.clock.tick(self.settings.FPS)
 
@@ -79,6 +85,7 @@ class AlienInvasion:
         # Render updated frame/image of game state at desired FPS
         self.screen.blit(self.bg, (0,0))
         self.ship.draw()
+        self.alien.draw_alien()
         pygame.display.flip()
 
     def _check_keydown_events(self, event):

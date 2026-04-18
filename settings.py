@@ -1,7 +1,7 @@
 """
 File Name: settings.py
 Author: Tyler D. Collins
-Date: 4/12/2026
+Date: 4/18/2026
 
 Purpose: The purpose of this file is to create the Settings class/module that 
 contains a set of specifications to be used in the creation of the 
@@ -42,6 +42,13 @@ class Settings:
         game screen
         bullet_amount (int): The maximum number of bullets/lasers the 
         ship/player can have in their arsenal at any time
+
+        alien_file (Path): Path of the image file used to depict an alien object
+        alien_w (int): Refers to the relative width of an individual alien 
+        object
+        alien_h (int): Refers to the relative height of an individual alien 
+        object
+        fleet_speed (int): The speed of the alien fleet when moving on-screen
     """
 
     def __init__(self):
@@ -66,3 +73,9 @@ class Settings:
         self.bullet_w: int = 25
         self.bullet_h: int = 80
         self.bullet_amount: int = 5
+
+        # Alien settings
+        self.alien_file: Path = Path.cwd() / 'Assets' / 'images' / 'enemy_4.png'
+        self.alien_w: int = 30
+        self.alien_h: int = 30
+        self.fleet_speed: int = 2
