@@ -59,6 +59,10 @@ class AlienInvasion:
         self.laser_sound = pygame.mixer.Sound(self.settings.laser_sound)
         self.laser_sound.set_volume(0.7)
 
+        # Set up sound for laser impact with alien
+        self.impact_sound = pygame.mixer.Sound(self.settings.impact_sound)
+        self.impact_sound.set_volume(0.7)
+
 
     def run_game(self):
         # Game Loop
@@ -76,6 +80,17 @@ class AlienInvasion:
         if self.ship.check_collisions(self.alien_fleet.fleet) == True:
             self._reset_level()
             # subtract 1 life if possible
+        
+        # Check for collisions between alien and left edge of screen behind ship
+        # which resets the level
+        if self.alien_fleet.check_fleet_reach_end():
+            self._reset_level()
+
+        # Check for collisions between lasers and aliens
+        collisions = self.alien_fleet.check_collisions(self.ship.arsenal.arsenal)
+        if collisions == True:
+            self.impact_sound.play()
+            self.impact_sound.fadeout(500)
 
 
     def _reset_level(self):

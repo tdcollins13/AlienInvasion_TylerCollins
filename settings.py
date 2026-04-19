@@ -34,6 +34,8 @@ class Settings:
         bullet_file (Path): Path of the image file used as the bullets/
         lasers fired by the ship/player
         laser_sound (Path): Path of the audio file used for ship laser fire
+        impact_sound (Path): Path of the audio file used for laser collisions 
+        with aliens
         bullet_speed (int): The speed of a bullet/laser when moving across the 
         screen
         bullet_w (int): The relative width of the bullet/laser object on the 
@@ -74,6 +76,7 @@ class Settings:
         # Bullet settings
         self.bullet_file: Path = Path.cwd() / 'Assets' / 'images' / 'laserBlast.png'
         self.laser_sound: Path = Path.cwd() / 'Assets' / 'sound' / 'laser.mp3'
+        self.impact_sound: Path = Path.cwd() / 'Assets' / 'sound' / 'impactSound.mp3'
         self.bullet_speed: int = 7
         self.bullet_w: int = 25
         self.bullet_h: int = 80
@@ -83,6 +86,6 @@ class Settings:
         self.alien_file: Path = Path.cwd() / 'Assets' / 'images' / 'enemy_4.png'
         self.alien_w: int = 30
         self.alien_h: int = 30
-        self.fleet_speed: int = 2
+        self.fleet_speed: int = 1
         self.fleet_direction: int = 1
         self.fleet_shift_speed: int = 30
