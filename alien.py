@@ -22,6 +22,7 @@ class Alien(Sprite):
         Sprite (Sprite): Represents a group of alien objects
 
     Attributes:
+        fleet (AlienFleet): Represents the entire alien fleet
         screen (Surface): The image/space of the game screen
         boundaries (Rect): Coordinates/dimensions of the game screen boundaries
         settings (Settings): Module of predefined specifications used to create 
@@ -35,6 +36,7 @@ class Alien(Sprite):
         
         # Initialize game attributes obtained from AlienFleet module
         super().__init__()
+        self.fleet = fleet
         self.screen = fleet.game.screen
         self.boundaries = fleet.game.screen.get_rect()
         self.settings = fleet.game.settings
@@ -54,20 +56,17 @@ class Alien(Sprite):
         self.x_coord = int(self.rect.x)
 
     def update(self):
-        # Updating alien movement w/ defined fleet speed from settings file
+        # Updating alien movement and position
         temp_speed = self.settings.fleet_speed
-        # Flip direction of alien movement and shift alien fleet closer to ship 
-        # (left) when screen boundary is reached
-        if self.check_edges():
-            self.settings.fleet_direction *= -1
-            self.x_coord -= self.settings.fleet_shift_speed
-        self.y_coord += (temp_speed * self.settings.fleet_direction)
+        self.y_coord += (temp_speed * self.fleet.fleet_direction)
         self.rect.y = self.y_coord
         self.rect.x = self.x_coord
+
 
     def draw_alien(self):
         # Draw alien image to game screen
         self.screen.blit(self.image, self.rect)
+
 
     def check_edges(self):
         # Determine if alien has reached the bottom or top boundary of screen

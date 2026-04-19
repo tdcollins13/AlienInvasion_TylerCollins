@@ -49,9 +49,6 @@ class AlienInvasion:
 
         # Initialize ship/player object & alien
         self.ship = Ship(self, Arsenal(self))
-        #self.alien = Alien(self, 
-        #    (self.settings.screen_w - self.settings.alien_w - 10), 10
-        #    )
         self.alien_fleet = AlienFleet(self)
         self.alien_fleet.create_fleet()
 
@@ -59,15 +56,17 @@ class AlienInvasion:
         pygame.mixer.init()
         self.laser_sound = pygame.mixer.Sound(self.settings.laser_sound)
         self.laser_sound.set_volume(0.7)
-    
+
+
     def run_game(self):
         # Game Loop
         while self.running == True:
             self._check_events()
             self.ship.update()
-            #self.alien.update()
+            self.alien_fleet.update_fleet()
             self._update_screen()
             self.clock.tick(self.settings.FPS)
+
 
     def _check_events(self):
         for event in pygame.event.get():
@@ -82,13 +81,15 @@ class AlienInvasion:
             # Check events for when a key is released
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
-    
+
+
     def _update_screen(self):
         # Render updated frame/image of game state at desired FPS
         self.screen.blit(self.bg, (0,0))
         self.ship.draw()
         self.alien_fleet.draw()
         pygame.display.flip()
+
 
     def _check_keydown_events(self, event):
         # Ship moves up when 'up' arrow key is pressed
@@ -107,6 +108,7 @@ class AlienInvasion:
             self.running = False
             pygame.quit()
             sys.exit()
+
 
     def _check_keyup_events(self, event):
         # Ship stops moving up when up arrow key is released

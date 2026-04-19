@@ -120,6 +120,28 @@ class AlienFleet:
         new_alien = Alien(self, current_x, current_y)
         self.fleet.add(new_alien)
 
+    
+    def _check_fleet_edges(self):
+        # Flip direction of alien movement when screen boundary is reached
+        alien: 'Alien'
+        for alien in self.fleet:
+            if alien.check_edges() == True:
+                self._shift_alien_fleet()
+                self.fleet_direction *= -1
+                break
+    
+
+    def _shift_alien_fleet(self):
+        # Shift alien fleet closer to ship when screen boundary is reached
+        for alien in self.fleet:
+            alien.x_coord -= self.fleet_shift_speed
+
+
+    def update_fleet(self):
+        # Updating fleet position and movement
+        self._check_fleet_edges()
+        self.fleet.update()
+
 
     def draw(self):
         # Draw an alien object to game screen for each alien in the fleet
