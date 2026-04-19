@@ -61,6 +61,9 @@ class AlienFleet:
         # Create new aliens below each other to form a column of aliens
         for row in range(fleet_h):
             current_y = (alien_h * row) + y_offset
+            # Skip even rows, adding spaces between aliens in the same column
+            if row % 2 == 0:
+                continue
             self._create_alien(current_y, (screen_w - alien_w - 10))
 
     def calculate_fleet_size(self, alien_h, screen_h):
