@@ -15,7 +15,7 @@ import pygame
 from settings import Settings
 from ship import Ship
 from arsenal import Arsenal
-from alien import Alien
+from alien_fleet import AlienFleet
 
 class AlienInvasion:
     """Represents the AlienInvasion game
@@ -49,9 +49,11 @@ class AlienInvasion:
 
         # Initialize ship/player object & alien
         self.ship = Ship(self, Arsenal(self))
-        self.alien = Alien(self, 
-            (self.settings.screen_w - self.settings.alien_w - 10), 10
-            )
+        #self.alien = Alien(self, 
+        #    (self.settings.screen_w - self.settings.alien_w - 10), 10
+        #    )
+        self.alien_fleet = AlienFleet(self)
+        self.alien_fleet.create_fleet()
 
         # Set up sound for laser fire
         pygame.mixer.init()
@@ -63,7 +65,7 @@ class AlienInvasion:
         while self.running == True:
             self._check_events()
             self.ship.update()
-            self.alien.update()
+            #self.alien.update()
             self._update_screen()
             self.clock.tick(self.settings.FPS)
 
@@ -85,7 +87,7 @@ class AlienInvasion:
         # Render updated frame/image of game state at desired FPS
         self.screen.blit(self.bg, (0,0))
         self.ship.draw()
-        self.alien.draw_alien()
+        self.alien_fleet.draw()
         pygame.display.flip()
 
     def _check_keydown_events(self, event):

@@ -12,9 +12,8 @@ their movement behavior.
 import pygame
 from pygame.sprite import Sprite
 from typing import TYPE_CHECKING
-
 if TYPE_CHECKING:
-    from alien_invasion import AlienInvasion
+    from alien_fleet import AlienFleet
 
 class Alien(Sprite):
     """Represents a single alien sprite in the AlienInvasion game
@@ -32,13 +31,13 @@ class Alien(Sprite):
         y_coord (int): 'y' coordinate on game screen of top left corner of alien
         x_coord (int): 'x' coordinate on game screen of top left corner of alien
     """
-    def __init__(self, game: 'AlienInvasion', x: float, y: float):
+    def __init__(self, fleet: 'AlienFleet', x: float, y: float):
         
-        # Initialize attributes from AlienInvasion
+        # Initialize game attributes obtained from AlienFleet module
         super().__init__()
-        self.screen = game.screen
-        self.boundaries = game.screen.get_rect()
-        self.settings = game.settings
+        self.screen = fleet.game.screen
+        self.boundaries = fleet.game.screen.get_rect()
+        self.settings = fleet.game.settings
 
         # Load and scale alien image
         self.image = pygame.image.load(self.settings.alien_file)
