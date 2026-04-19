@@ -49,6 +49,8 @@ class Settings:
         alien_h (int): Refers to the relative height of an individual alien 
         object
         fleet_speed (int): The speed of the alien fleet when moving on-screen
+        fleet_direction (int): Variable acting as the 'switch' that determines 
+        whether the alien fleet is moving up or down on-screen
     """
 
     def __init__(self):
@@ -79,3 +81,4 @@ class Settings:
         self.alien_w: int = 30
         self.alien_h: int = 30
         self.fleet_speed: int = 2
+        self.fleet_direction: int = 1

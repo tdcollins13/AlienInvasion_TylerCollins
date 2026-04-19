@@ -55,11 +55,19 @@ class Alien(Sprite):
         self.x_coord = int(self.rect.x)
 
     def update(self):
-        # Updating alien movement
+        # Updating alien movement w/ defined fleet speed from settings file
         temp_speed = self.settings.fleet_speed
-        self.y_coord += temp_speed
+        # Flip direction of alien movement when screen boundary is reached
+        if self.check_edges():
+            self.settings.fleet_direction *= -1
+        self.y_coord += (temp_speed * self.settings.fleet_direction)
         self.rect.y = self.y_coord
 
     def draw_alien(self):
         # Draw alien image to game screen
         self.screen.blit(self.image, self.rect)
+
+    def check_edges(self):
+        # Determine if alien has reached the bottom or top boundary of screen
+        return bool(self.rect.bottom >= self.boundaries.bottom or 
+                self.rect.top <= self.boundaries.top)
