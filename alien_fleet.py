@@ -4,7 +4,8 @@ Author: Tyler D. Collins
 Date: 4/18/2026
 
 Purpose: The purpose of this file is to create the AlienFleet class/module that
-defines how the alien fleet structure is generated and ___
+defines how the alien fleet structure is generated and facilitates collision 
+behavior with other objects in the game.
 """
 
 # Import Necessary Modules w/ workaround for circular imports

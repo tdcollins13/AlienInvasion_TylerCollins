@@ -95,7 +95,7 @@ class AlienInvasion:
 
         # Check for collisions between lasers and aliens
         collisions = self.alien_fleet.check_collisions(self.ship.arsenal.arsenal)
-        if collisions == True:
+        if collisions:
             self.impact_sound.play()
             self.impact_sound.fadeout(500)
 
