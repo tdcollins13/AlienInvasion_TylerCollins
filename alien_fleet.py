@@ -30,7 +30,6 @@ class AlienFleet:
         movement direction
     """
     def __init__(self, game: 'AlienInvasion'):
-
         # Initialize attributes from AlienInvasion
         self.game = game
         self.settings = game.settings
@@ -45,6 +44,7 @@ class AlienFleet:
         # Generate alien fleet by adding new alien objects to fleet Sprite Group
         self.create_fleet()
 
+
     def create_fleet(self):
         # Obtain screen and alien dimensions from settings
         alien_h: int = self.settings.alien_h
@@ -52,39 +52,60 @@ class AlienFleet:
         screen_h: int = self.settings.screen_h
         screen_w: int = self.settings.screen_w
 
-        # Calculate number of aliens that can fit in a single column and single 
-        # row of the fleet based on screen & alien dimensions
+        # Calculate number of aliens to fit in each column and row of fleet
         fleet_h, fleet_w = self.calculate_fleet_size(alien_h, screen_h, 
-                                                     alien_w, screen_w
-                                                    )
-        half_screen: int = (screen_w // 2)
-        fleet_vertical_space: int = (fleet_h * alien_h)
-        fleet_horizontal_space: int = (fleet_w * alien_w)
-        # Determine spacing between aliens in fleet rows and columns
-        y_offset = int((screen_h - fleet_vertical_space)//2)
-        x_offset = int((half_screen - fleet_horizontal_space)//2)
+            alien_w, screen_w)
+        
+        # Calculate spacing between places within fleet columns and rows
+        y_offset, x_offset = self.calculate_offsets(alien_h, alien_w, screen_h, 
+            screen_w, fleet_h, fleet_w)
+        
+        # Generate fleet structure
+        self._create_rectangle_fleet(alien_h, alien_w, fleet_h, fleet_w, 
+            y_offset, x_offset, screen_w)
 
+
+    def _create_rectangle_fleet(self, alien_h, alien_w, fleet_h, fleet_w, 
+        y_offset, x_offset, screen_w):
         # Create new aliens that form an array/fleet of aliens
         for col in range(fleet_w):
             for row in range(fleet_h):
                 current_y = (alien_h * row) + y_offset
                 current_x = screen_w - ((alien_w * col) + x_offset)
+
                 # Remove aliens in even rows & columns, adding spaces between 
                 # aliens of the same row or column
                 if row % 2 == 0 or col % 2 == 0:
                     continue
                 self._create_alien(current_y, current_x)
 
+
+    def calculate_offsets(self, alien_h, alien_w, screen_h, screen_w, 
+        fleet_h, fleet_w):
+        # Calculate vertical and horizontal dimensions of space filled by fleet
+        half_screen: int = (screen_w // 2)
+        fleet_vertical_space: int = (fleet_h * alien_h)
+        fleet_horizontal_space: int = (fleet_w * alien_w)
+
+        # Determine spacing between aliens in fleet rows and columns
+        y_offset = int((screen_h - fleet_vertical_space)//2)
+        x_offset = int((half_screen - fleet_horizontal_space)//2)
+
+        return y_offset, x_offset
+
+
     def calculate_fleet_size(self, alien_h, screen_h, alien_w, screen_w):
         # Ensure fleet columns and rows are filled with max number of aliens for
         # the allotted space for the alien fleet upon start of level
         fleet_h = (screen_h // alien_h)
         fleet_w = ((screen_w / 2)//alien_w)
+
         # Find max # of aliens to fit in fleet columns
         if fleet_h % 2 == 0:
             fleet_h -= 1
         else:
             fleet_h -= 2
+
         # Find max # of aliens to fit in fleet rows
         if fleet_w % 2 == 0:
             fleet_w -= 1
@@ -92,11 +113,13 @@ class AlienFleet:
             fleet_w -= 2
 
         return int(fleet_h), int(fleet_w)
+
     
     def _create_alien(self, current_y: int, current_x: int):
         # Add all newly created aliens to the fleet Sprite Group
         new_alien = Alien(self, current_x, current_y)
         self.fleet.add(new_alien)
+
 
     def draw(self):
         # Draw an alien object to game screen for each alien in the fleet
