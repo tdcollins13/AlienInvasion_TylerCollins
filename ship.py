@@ -1,7 +1,7 @@
 """
 File Name: ship.py
 Author: Tyler D. Collins
-Date: 4/12/2026
+Date: 4/18/2026
 
 Purpose: The purpose of this file is to create the Ship class/module that 
 defines how the ship/player object is generated, its position and its 
@@ -27,14 +27,12 @@ class Ship:
 
         image (Surface): The on-screen image of the ship/player
         rect (Rect): Coordinates/dimensions of the ship/player image
-        y_coord (int): 'y' coordinate on game screen of top left corner of ship
         moving_up (bool): Indicates whether or not the ship is moving up
         moving_down (bool): Indicates whether or not the ship is moving down
-        arsenal (Arsenal): 
+        arsenal (Arsenal): Represents the ship's ammo reserves
     """
 
     def __init__(self, game: 'AlienInvasion', arsenal: 'Arsenal'):
-
         # Attributes pertaining to game/screen
         self.game = game
         self.settings = game.settings
@@ -48,10 +46,9 @@ class Ship:
             )
         self.image = pygame.transform.rotate(self.image, 270)
         
-        # Ship positioned at middle of game screen's left edge at game start
+        # Ship positioning
         self.rect = self.image.get_rect()
-        self.rect.midleft = self.boundaries.midleft
-        self.y_coord = int(self.rect.y)
+        self._center_ship()
 
         # Ship movement, initialized as stationary
         self.moving_up: bool = False
@@ -59,11 +56,19 @@ class Ship:
 
         # Ship arsenal
         self.arsenal = arsenal
-    
+
+
+    def _center_ship(self):
+        # Position ship at middle of game screen's left edge at game start/reset
+        self.rect.midleft = self.boundaries.midleft
+        self.y_coord = int(self.rect.y)
+
+
     def update(self):
         # Updating ship movement and arsenal capacity
         self._update_ship_movement()
         self.arsenal.update_arsenal()
+
 
     def _update_ship_movement(self):
         # Updating ship position when ship is moved by player
@@ -76,11 +81,21 @@ class Ship:
 
         self.rect.y = self.y_coord
 
+
     def draw(self):
         # Draw ship image and arsenal capacity to game screen
         self.arsenal.draw()
         self.screen.blit(self.image, self.rect)
 
+
     def fire(self):
         # Order new bullet to be fired when called
         return self.arsenal.fire_bullet()
+    
+
+    def check_collisions(self, other_group):
+        # Resets ship position upon collision with an alien
+        if pygame.sprite.spritecollideany(self, other_group):
+            self._center_ship()
+            return True
+        return False

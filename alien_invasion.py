@@ -28,7 +28,9 @@ class AlienInvasion:
         running (bool): Indicates whether or not the game is currently running
         clock (Clock): Tracks the progression of time while the game is running
         ship (Ship): The ship/player object being used in the game
-        alien (Alien): 
+        alien_fleet (AlienFleet): Represents the entire alien fleet
+        laser_sound (Sound): Sound that plays when a laser is fired
+        impact_sound (Sound): Sound that plays when an alien is destroyed
     """
 
     def __init__(self):
@@ -64,8 +66,23 @@ class AlienInvasion:
             self._check_events()
             self.ship.update()
             self.alien_fleet.update_fleet()
+            self._check_collisions()
             self._update_screen()
             self.clock.tick(self.settings.FPS)
+
+
+    def _check_collisions(self):
+        # Check for collisions between aliens and ship, which resets the level
+        if self.ship.check_collisions(self.alien_fleet.fleet) == True:
+            self._reset_level()
+            # subtract 1 life if possible
+
+
+    def _reset_level(self):
+        # Reset ship arsenal and create new fleet upon level reset
+        self.ship.arsenal.arsenal.empty()
+        self.alien_fleet.fleet.empty()
+        self.alien_fleet.create_fleet()
 
 
     def _check_events(self):
