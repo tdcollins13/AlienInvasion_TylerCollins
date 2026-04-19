@@ -51,6 +51,9 @@ class Settings:
         fleet_speed (int): The speed of the alien fleet when moving on-screen
         fleet_direction (int): Variable acting as the 'switch' that determines 
         whether the alien fleet is moving up or down on-screen
+        fleet_shift_speed (int): The relative distance the alien fleet shifts
+        towards the ship/player when the alien fleet hits a boundary and flips
+        movement direction
     """
 
     def __init__(self):
@@ -82,3 +85,4 @@ class Settings:
         self.alien_h: int = 30
         self.fleet_speed: int = 2
         self.fleet_direction: int = 1
+        self.fleet_shift_speed: int = 30

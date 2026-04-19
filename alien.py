@@ -57,11 +57,14 @@ class Alien(Sprite):
     def update(self):
         # Updating alien movement w/ defined fleet speed from settings file
         temp_speed = self.settings.fleet_speed
-        # Flip direction of alien movement when screen boundary is reached
+        # Flip direction of alien movement and shift alien fleet closer to ship 
+        # (left) when screen boundary is reached
         if self.check_edges():
             self.settings.fleet_direction *= -1
+            self.x_coord -= self.settings.fleet_shift_speed
         self.y_coord += (temp_speed * self.settings.fleet_direction)
         self.rect.y = self.y_coord
+        self.rect.x = self.x_coord
 
     def draw_alien(self):
         # Draw alien image to game screen
