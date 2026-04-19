@@ -1,7 +1,7 @@
 """
 File Name: arsenal.py
 Author: Tyler D. Collins
-Date: 4/12/2026
+Date: 4/19/2026
 
 Purpose: The purpose of this file is to create the Arsenal class/module that 
 defines how the ammo capacity and expended ammo from the ship/player is 
@@ -15,6 +15,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from alien_invasion import AlienInvasion
 
+
 class Arsenal:
     """Represents the ammo reserves of the ship/player in the AlienInvasion game
 
@@ -24,30 +25,37 @@ class Arsenal:
         ship's arsenal
         arsenal (Group): Manages group of bullet sprites for the ship to fire
     """
-
     def __init__(self, game: 'AlienInvasion'):
         self.game = game
         self.settings = game.settings
         self.arsenal = pygame.sprite.Group()
 
+
     def update_arsenal(self):
-        # Updates quantity of bullets in ship arsenal
+        """Updates quantity of bullets in ship arsenal"""
         self.arsenal.update()
         self._remove_bullets_offscreen()
 
+
     def _remove_bullets_offscreen(self):
-        # Make bullet available for re-fire once it leaves game screen
+        """Make bullet available for re-fire once it leaves game screen"""
         for bullet in self.arsenal.copy():
             if bullet.rect.left >= self.settings.screen_w:
                 self.arsenal.remove(bullet)
 
+
     def draw(self):
-        # Draw bullet image to game screen once fired
+        """Draw bullet image to game screen once fired"""
         for bullet in self.arsenal:
             bullet.draw_bullet()
 
     def fire_bullet(self):
-        # Bullets/Lasers are fired only when there is ammo left in ship arsenal
+        """Fires a new bullet/laser sprite. Bullets/Lasers are fired only when 
+        there is ammo left in ship arsenal
+
+        Returns:
+            bool: Signals if/when a bullet is successfully fired
+        """
         if len(self.arsenal) < self.settings.bullet_amount:
             new_bullet = Bullet(self.game)
             self.arsenal.add(new_bullet)

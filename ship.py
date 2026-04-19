@@ -1,7 +1,7 @@
 """
 File Name: ship.py
 Author: Tyler D. Collins
-Date: 4/18/2026
+Date: 4/19/2026
 
 Purpose: The purpose of this file is to create the Ship class/module that 
 defines how the ship/player object is generated, its position and its 
@@ -14,6 +14,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from alien_invasion import AlienInvasion
     from arsenal import Arsenal
+
 
 class Ship:
     """Represents the ship/player object in the AlienInvasion game
@@ -31,7 +32,6 @@ class Ship:
         moving_down (bool): Indicates whether or not the ship is moving down
         arsenal (Arsenal): Represents the ship's ammo reserves
     """
-
     def __init__(self, game: 'AlienInvasion', arsenal: 'Arsenal'):
         # Attributes pertaining to game/screen
         self.game = game
@@ -59,20 +59,23 @@ class Ship:
 
 
     def _center_ship(self):
-        # Position ship at middle of game screen's left edge at game start/reset
+        """Position ship at middle of game screen's left edge at game 
+        start/reset"""
         self.rect.midleft = self.boundaries.midleft
         self.y_coord = int(self.rect.y)
 
 
     def update(self):
-        # Updating ship movement and arsenal capacity
+        """Updating ship movement and arsenal capacity"""
         self._update_ship_movement()
         self.arsenal.update_arsenal()
 
 
     def _update_ship_movement(self):
-        # Updating ship position when ship is moved by player
-        # Movement is restricted within screen bounds
+        """Updating ship position when ship is moved by player Movement is 
+        restricted within screen bounds"""
+
+        # Flip movement direction based on which screen boundary is reached
         temp_speed = self.settings.ship_speed
         if self.moving_up and self.rect.top > self.boundaries.top:
             self.y_coord -= temp_speed
@@ -83,17 +86,27 @@ class Ship:
 
 
     def draw(self):
-        # Draw ship image and arsenal capacity to game screen
+        """Draw ship image and arsenal capacity to game screen"""
         self.arsenal.draw()
         self.screen.blit(self.image, self.rect)
 
 
     def fire(self):
-        # Order new bullet to be fired when called
+        """Order new bullet to be fired when called"""
         return self.arsenal.fire_bullet()
     
 
     def check_collisions(self, other_group):
+        """Resets ship position upon collision with an alien
+
+        Args:
+            other_group (Group): Alien fleet sprite group
+
+        Returns:
+            bool: Signals if/when a collision between an alien and the ship 
+            occurs
+        """
+
         # Resets ship position upon collision with an alien
         if pygame.sprite.spritecollideany(self, other_group):
             self._center_ship()

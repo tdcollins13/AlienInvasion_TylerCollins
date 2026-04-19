@@ -1,7 +1,7 @@
 """
 File Name: alien_fleet.py
 Author: Tyler D. Collins
-Date: 4/18/2026
+Date: 4/19/2026
 
 Purpose: The purpose of this file is to create the AlienFleet class/module that
 defines how the alien fleet structure is generated and facilitates collision 
@@ -14,6 +14,7 @@ from typing import TYPE_CHECKING
 from alien import Alien
 if TYPE_CHECKING:
     from alien_invasion import AlienInvasion
+
 
 class AlienFleet:
     """Represents the entire alien fleet in the AlienInvasion game
@@ -47,27 +48,35 @@ class AlienFleet:
 
 
     def create_fleet(self):
+        """Constructs a new, full alien fleet on screen"""
         # Obtain screen and alien dimensions from settings
         alien_h: int = self.settings.alien_h
         alien_w: int = self.settings.alien_w
         screen_h: int = self.settings.screen_h
         screen_w: int = self.settings.screen_w
 
-        # Calculate number of aliens to fit in each column and row of fleet
+        # Call methods that facilitate the construction of the alien fleet
         fleet_h, fleet_w = self.calculate_fleet_size(alien_h, screen_h, 
             alien_w, screen_w)
-        
-        # Calculate spacing between places within fleet columns and rows
         y_offset, x_offset = self.calculate_offsets(alien_h, alien_w, screen_h, 
             screen_w, fleet_h, fleet_w)
-        
-        # Generate fleet structure
         self._create_rectangle_fleet(alien_h, alien_w, fleet_h, fleet_w, 
             y_offset, x_offset, screen_w)
 
 
-    def _create_rectangle_fleet(self, alien_h, alien_w, fleet_h, fleet_w, 
-        y_offset, x_offset, screen_w):
+    def _create_rectangle_fleet(self, alien_h: int, alien_w: int, fleet_h: int, 
+        fleet_w: int, y_offset: int, x_offset: int, screen_w: int):
+        """Facilitates filling out the rectangular structure of the alien fleet
+
+        Args:
+            alien_h (int): height of an alien sprite
+            alien_w (int): width of an alien sprite
+            fleet_h (int): # of aliens that can fit in a column of the fleet
+            fleet_w (int): # of aliens that can fit in a row of the fleet
+            y_offset (int): vertical spacing between alien spaces
+            x_offset (int): horizontal spacing between alien spaces
+            screen_w (int): width of the game screen
+        """
         # Create new aliens that form an array/fleet of aliens
         for col in range(fleet_w):
             for row in range(fleet_h):
@@ -81,8 +90,22 @@ class AlienFleet:
                 self._create_alien(current_y, current_x)
 
 
-    def calculate_offsets(self, alien_h, alien_w, screen_h, screen_w, 
-        fleet_h, fleet_w):
+    def calculate_offsets(self, alien_h: int, alien_w: int, screen_h: int, 
+        screen_w: int, fleet_h: int, fleet_w: int):
+        """Calculate spacing between places within fleet columns and rows
+
+        Args:
+            alien_h (int): height of an alien sprite
+            alien_w (int): width of an alien sprite
+            screen_h (int): height of the game screen
+            screen_w (int): width of the game screen
+            fleet_h (int): # of aliens that can fit in a column of the fleet
+            fleet_w (int): # of aliens that can fit in a row of the fleet
+
+        Returns:
+            tuple: vertical spacing between alien spaces, horizontal spacing 
+            between alien spaces
+        """
         # Calculate vertical and horizontal dimensions of space filled by fleet
         half_screen: int = (screen_w // 2)
         fleet_vertical_space: int = (fleet_h * alien_h)
@@ -95,9 +118,21 @@ class AlienFleet:
         return y_offset, x_offset
 
 
-    def calculate_fleet_size(self, alien_h, screen_h, alien_w, screen_w):
-        # Ensure fleet columns and rows are filled with max number of aliens for
-        # the allotted space for the alien fleet upon start of level
+    def calculate_fleet_size(self, alien_h: int, screen_h: int, alien_w: int, 
+        screen_w: int):
+        """Ensure fleet columns and rows are filled with max number of aliens 
+        for the allotted space for the alien fleet upon start of level
+
+        Args:
+            alien_h (int): height of an alien sprite
+            screen_h (int): height of the game screen
+            alien_w (int): width of an alien sprite
+            screen_w (int): width of the game screen
+
+        Returns:
+            tuple: number of aliens that can fill a column, number of aliens 
+            that can fill a row
+        """
         fleet_h = (screen_h // alien_h)
         fleet_w = ((screen_w / 2)//alien_w)
 
@@ -117,13 +152,20 @@ class AlienFleet:
 
     
     def _create_alien(self, current_y: int, current_x: int):
-        # Add all newly created aliens to the fleet Sprite Group
+        """Add all newly created aliens to the fleet Sprite Group
+
+        Args:
+            current_y (int): screen 'y' coordinate of the next alien to be 
+            added to the fleet
+            current_x (int): screen 'x' coordinate of the next alien to be 
+            added to the fleet
+        """
         new_alien = Alien(self, current_x, current_y)
         self.fleet.add(new_alien)
 
     
     def _check_fleet_edges(self):
-        # Flip direction of alien movement when screen boundary is reached
+        """Flip direction of alien movement when screen boundary is reached"""
         alien: 'Alien'
         for alien in self.fleet:
             if alien.check_edges() == True:
@@ -133,32 +175,42 @@ class AlienFleet:
     
 
     def _shift_alien_fleet(self):
-        # Shift alien fleet closer to ship when screen boundary is reached
+        """Shift alien fleet closer to ship when screen boundary is reached"""
         for alien in self.fleet:
             alien.x_coord -= self.fleet_shift_speed
 
 
     def update_fleet(self):
-        # Updating fleet position and movement
+        """Updating fleet position and movement"""
         self._check_fleet_edges()
         self.fleet.update()
 
 
     def draw(self):
-        # Draw an alien object to game screen for each alien in the fleet
+        """Draw an alien object to game screen for each alien in the fleet"""
         alien: 'Alien'
         for alien in self.fleet:
             alien.draw_alien()
 
 
     def check_collisions(self, other_group):
-        # Checks for collisions between laser and alien sprites, removing 
-        # those that have collided from their respective groups
+        """Checks for collisions between laser and alien sprites, removing 
+        those that have collided from their respective groups
+
+        Args:
+            other_group (Group): Arsenal sprite group
+
+        Returns:
+            dict: A dictionary containing keys of alien sprites within the fleet
+            that have collided with laser sprites, with their values as lists 
+            of the laser sprites that collided with the alien
+        """
         return pygame.sprite.groupcollide(self.fleet, other_group, True, True)
 
 
     def check_fleet_reach_end(self):
-        # Checks whether alien fleet has reached the screen edge behind the ship
+        """Checks whether alien fleet has reached the screen edge behind the 
+        ship"""
         alien: 'Alien'
         for alien in self.fleet:
             if alien.rect.left <= 0:
@@ -167,5 +219,10 @@ class AlienFleet:
     
 
     def check_destroyed_status(self):
-        # Checks if entire alien fleet has been destroyed
+        """Checks if entire alien fleet has been destroyed
+
+        Returns:
+            bool: False signifies the fleet still exists, True means fleet has 
+            been destroyed
+        """
         return not self.fleet

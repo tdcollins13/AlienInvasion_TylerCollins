@@ -1,7 +1,7 @@
 """
 File Name: alien_invasion.py
 Author: Tyler D. Collins
-Date: 4/18/2026
+Date: 4/19/2026
 
 Purpose: This program is the main file in the 'AlienInvasion_TylerCollins'
 repository, which contains the code that runs a complete 2D game using Pygame. 
@@ -18,6 +18,7 @@ from ship import Ship
 from arsenal import Arsenal
 from alien_fleet import AlienFleet
 from time import sleep
+
 
 class AlienInvasion:
     """Represents the AlienInvasion game
@@ -38,7 +39,6 @@ class AlienInvasion:
     """
 
     def __init__(self):
-
         # Initialize game screen/window
         pygame.init()
         self.settings = Settings()
@@ -73,6 +73,7 @@ class AlienInvasion:
 
 
     def run_game(self):
+        """Responsible for calling the methods that run the game"""
         # Game Loop
         while self.running == True:
             self._check_events()
@@ -85,6 +86,7 @@ class AlienInvasion:
 
 
     def _check_collisions(self):
+        """Checks for collisions between game objects"""
         # Check for collisions between aliens and ship
         if self.ship.check_collisions(self.alien_fleet.fleet) == True:
             self._check_game_status()
@@ -105,6 +107,8 @@ class AlienInvasion:
 
     
     def _check_game_status(self):
+        """Checks for player lives remaining and either resets the level or 
+        ends the game"""
         # Resets level if there are ships remaining, otherwise game ends
         if self.game_stats.ships_left > 0:
             self.game_stats.ships_left -= 1
@@ -115,6 +119,7 @@ class AlienInvasion:
 
 
     def _reset_level(self):
+        """Reset game level"""
         # Reset ship arsenal and create new fleet upon level reset
         self.ship.arsenal.arsenal.empty()
         self.alien_fleet.fleet.empty()
@@ -122,6 +127,7 @@ class AlienInvasion:
 
 
     def _check_events(self):
+        """Checks for keyboard input by player"""
         for event in pygame.event.get():
             # Ends game when game window is closed
             if event.type == pygame.QUIT:
@@ -137,6 +143,7 @@ class AlienInvasion:
 
 
     def _update_screen(self):
+        """Updates game screen"""
         # Render updated frame/image of game state at desired FPS
         self.screen.blit(self.bg, (0,0))
         self.ship.draw()
@@ -145,6 +152,11 @@ class AlienInvasion:
 
 
     def _check_keydown_events(self, event):
+        """Performs actions when player provides keyboard input to control game
+
+        Args:
+            event (Event): An instance of keyboard input
+        """
         # Ship moves up when 'up' arrow key is pressed
         if event.key == pygame.K_UP:
             self.ship.moving_up = True
@@ -164,6 +176,12 @@ class AlienInvasion:
 
 
     def _check_keyup_events(self, event):
+        """Ensures appropriate game actions stop when keyboard controls are 
+        released
+
+        Args:
+            event (Event): An instance of keyboard input
+        """
         # Ship stops moving up when up arrow key is released
         if event.key == pygame.K_UP:
             self.ship.moving_up = False
