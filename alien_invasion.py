@@ -92,6 +92,10 @@ class AlienInvasion:
             self.impact_sound.play()
             self.impact_sound.fadeout(500)
 
+        # Check if entire alien fleet destroyed. Total destruction resets level
+        if self.alien_fleet.check_destroyed_status():
+            self._reset_level()
+
 
     def _reset_level(self):
         # Reset ship arsenal and create new fleet upon level reset
