@@ -13,9 +13,11 @@ set of assets provided by GitHub user RedBeard41.
 import sys
 import pygame
 from settings import Settings
+from game_stats import GameStats
 from ship import Ship
 from arsenal import Arsenal
 from alien_fleet import AlienFleet
+from time import sleep
 
 class AlienInvasion:
     """Represents the AlienInvasion game
@@ -27,8 +29,10 @@ class AlienInvasion:
         bg (Surface): The image used as the background of the game screen
         running (bool): Indicates whether or not the game is currently running
         clock (Clock): Tracks the progression of time while the game is running
+        game_stats (GameStats): Contains player game stats
         ship (Ship): The ship/player object being used in the game
         alien_fleet (AlienFleet): Represents the entire alien fleet
+        game_active (bool): Represents whether game is active or has ended
         laser_sound (Sound): Sound that plays when a laser is fired
         impact_sound (Sound): Sound that plays when an alien is destroyed
     """
@@ -49,10 +53,14 @@ class AlienInvasion:
         self.running: bool = True
         self.clock = pygame.time.Clock()
 
+        # Initialize game stats
+        self.game_stats = GameStats(self.settings.starting_ship_count)
+
         # Initialize ship/player object & alien
         self.ship = Ship(self, Arsenal(self))
         self.alien_fleet = AlienFleet(self)
         self.alien_fleet.create_fleet()
+        self.game_active: bool = True
 
         # Set up sound for laser fire
         pygame.mixer.init()
@@ -68,23 +76,22 @@ class AlienInvasion:
         # Game Loop
         while self.running == True:
             self._check_events()
-            self.ship.update()
-            self.alien_fleet.update_fleet()
-            self._check_collisions()
+            if self.game_active == True:
+                self.ship.update()
+                self.alien_fleet.update_fleet()
+                self._check_collisions()
             self._update_screen()
             self.clock.tick(self.settings.FPS)
 
 
     def _check_collisions(self):
-        # Check for collisions between aliens and ship, which resets the level
+        # Check for collisions between aliens and ship
         if self.ship.check_collisions(self.alien_fleet.fleet) == True:
-            self._reset_level()
-            # subtract 1 life if possible
+            self._check_game_status()
         
         # Check for collisions between alien and left edge of screen behind ship
-        # which resets the level
         if self.alien_fleet.check_fleet_reach_end():
-            self._reset_level()
+            self._check_game_status()
 
         # Check for collisions between lasers and aliens
         collisions = self.alien_fleet.check_collisions(self.ship.arsenal.arsenal)
@@ -95,6 +102,16 @@ class AlienInvasion:
         # Check if entire alien fleet destroyed. Total destruction resets level
         if self.alien_fleet.check_destroyed_status():
             self._reset_level()
+
+    
+    def _check_game_status(self):
+        # Resets level if there are ships remaining, otherwise game ends
+        if self.game_stats.ships_left > 0:
+            self.game_stats.ships_left -= 1
+            self._reset_level()
+            sleep(0.5)
+        else:
+            self.game_active = False
 
 
     def _reset_level(self):

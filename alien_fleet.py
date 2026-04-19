@@ -160,7 +160,7 @@ class AlienFleet:
         # Checks whether alien fleet has reached the screen edge behind the ship
         alien: 'Alien'
         for alien in self.fleet:
-            if alien.rect.bottom >= self.settings.screen_h:
+            if alien.rect.left <= 0:
                 return True
         return False
     

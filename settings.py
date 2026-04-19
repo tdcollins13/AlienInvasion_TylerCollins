@@ -30,6 +30,7 @@ class Settings:
         ship_h (int): The relative height of the ship/player object on the game 
         screen
         ship_speed (int): The speed of the ship/player when moving up or down
+        starting_ship_count (int): The number of lives/ships the player has left
 
         bullet_file (Path): Path of the image file used as the bullets/
         lasers fired by the ship/player
@@ -72,6 +73,7 @@ class Settings:
         self.ship_w: int = 40
         self.ship_h: int = 60
         self.ship_speed: int = 3
+        self.starting_ship_count: int = 3
 
         # Bullet settings
         self.bullet_file: Path = Path.cwd() / 'Assets' / 'images' / 'laserBlast.png'
