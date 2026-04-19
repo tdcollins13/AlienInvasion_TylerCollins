@@ -52,29 +52,46 @@ class AlienFleet:
         screen_h: int = self.settings.screen_h
         screen_w: int = self.settings.screen_w
 
-        # Calculate number of aliens that can fit in a single column of the 
-        # fleet based on screen height, alien height and spacing between aliens
-        fleet_h: int = self.calculate_fleet_size(alien_h, screen_h)
+        # Calculate number of aliens that can fit in a single column and single 
+        # row of the fleet based on screen & alien dimensions
+        fleet_h, fleet_w = self.calculate_fleet_size(alien_h, screen_h, 
+                                                     alien_w, screen_w
+                                                    )
+        half_screen: int = (screen_w // 2)
         fleet_vertical_space: int = (fleet_h * alien_h)
+        fleet_horizontal_space: int = (fleet_w * alien_w)
+        # Determine spacing between aliens in fleet rows and columns
         y_offset = int((screen_h - fleet_vertical_space)//2)
+        x_offset = int((half_screen - fleet_horizontal_space)//2)
 
-        # Create new aliens below each other to form a column of aliens
-        for row in range(fleet_h):
-            current_y = (alien_h * row) + y_offset
-            # Skip even rows, adding spaces between aliens in the same column
-            if row % 2 == 0:
-                continue
-            self._create_alien(current_y, (screen_w - alien_w - 10))
+        # Create new aliens that form an array/fleet of aliens
+        for col in range(fleet_w):
+            for row in range(fleet_h):
+                current_y = (alien_h * row) + y_offset
+                current_x = screen_w - ((alien_w * col) + x_offset)
+                # Remove aliens in even rows & columns, adding spaces between 
+                # aliens of the same row or column
+                if row % 2 == 0 or col % 2 == 0:
+                    continue
+                self._create_alien(current_y, current_x)
 
-    def calculate_fleet_size(self, alien_h, screen_h):
-        # Ensure fleet columns are filled with aliens but leaves space between 
-        # fleet edges and screen edges for fleet to be able to move
+    def calculate_fleet_size(self, alien_h, screen_h, alien_w, screen_w):
+        # Ensure fleet columns and rows are filled with max number of aliens for
+        # the allotted space for the alien fleet upon start of level
         fleet_h = (screen_h // alien_h)
+        fleet_w = ((screen_w / 2)//alien_w)
+        # Find max # of aliens to fit in fleet columns
         if fleet_h % 2 == 0:
             fleet_h -= 1
         else:
             fleet_h -= 2
-        return fleet_h
+        # Find max # of aliens to fit in fleet rows
+        if fleet_w % 2 == 0:
+            fleet_w -= 1
+        else:
+            fleet_w -= 2
+
+        return int(fleet_h), int(fleet_w)
     
     def _create_alien(self, current_y: int, current_x: int):
         # Add all newly created aliens to the fleet Sprite Group
