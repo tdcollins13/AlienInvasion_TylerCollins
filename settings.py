@@ -1,7 +1,7 @@
 """
 File Name: settings.py
 Author: Tyler D. Collins
-Date: 4/18/2026
+Date: 4/23/2026
 
 Purpose: The purpose of this file is to create the Settings class/module that 
 contains a set of specifications to be used in the creation of the 
@@ -57,6 +57,9 @@ class Settings:
         fleet_shift_speed (int): The relative distance the alien fleet shifts
         towards the ship/player when the alien fleet hits a boundary and flips
         movement direction
+
+        *****FINISH/EDIT ATTRIBUTES*****
+
     """
 
     def __init__(self):
@@ -114,6 +117,7 @@ class Settings:
         self.bullet_speed: int = 7
         self.fleet_speed: int = 1
         self.fleet_drop_speed: int = 30
+        self.alien_points: int = 100
 
     
     def increase_difficulty(self):

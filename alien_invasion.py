@@ -1,7 +1,7 @@
 """
 File Name: alien_invasion.py
 Author: Tyler D. Collins
-Date: 4/19/2026
+Date: 4/23/2026
 
 Purpose: This program is the main file in the 'AlienInvasion_TylerCollins'
 repository, which contains the code that runs a complete 2D game using Pygame. 
@@ -55,7 +55,7 @@ class AlienInvasion:
         self.clock = pygame.time.Clock()
 
         # Initialize game stats and base difficulty
-        self.game_stats = GameStats(self.settings.starting_ship_count)
+        self.game_stats = GameStats(self)
         self.settings.initialize_dynamic_settings()
 
         # Initialize ship/player object & alien
@@ -105,11 +105,14 @@ class AlienInvasion:
         if collisions:
             self.impact_sound.play()
             self.impact_sound.fadeout(500)
+            self.game_stats.update(collisions)
 
         # Check if entire alien fleet destroyed. Total destruction resets level
         if self.alien_fleet.check_destroyed_status():
             self._reset_level()
-            #self.settings.increase_difficulty()
+            self.settings.increase_difficulty()
+            self.game_stats.update_level()
+            # Update HUD view
 
     
     def _check_game_status(self):
@@ -135,7 +138,7 @@ class AlienInvasion:
     def restart_game(self):
         """Begins new AlienInvasion game after play button is clicked"""
         self.settings.initialize_dynamic_settings()
-        # reset game stats
+        self.game_stats.reset_stats()
         # update HUD scores
         self._reset_level()
         self.ship._center_ship()
