@@ -108,6 +108,9 @@ class Settings:
         self.font_file: Path = (Path.cwd() / 'Assets' / 'Fonts' / 
             'Silkscreen' / 'Silkscreen-Bold.ttf')
         
+        # Hi-score tracking file
+        self.scores_file = Path.cwd() / 'Assets' / 'file' / 'scores.json'
+        
 
     def initialize_dynamic_settings(self):
         """Initializes settings corresponding to the speed of the player and 
