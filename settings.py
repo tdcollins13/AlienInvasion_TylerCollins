@@ -66,19 +66,23 @@ class Settings:
         self.screen_w: int = 1000
         self.screen_h: int = 600
         self.FPS: int = 60
-        self.bg_file: Path = Path.cwd() / 'Assets' / 'images' / 'Starbasesnow.png'
+        self.bg_file: Path = (Path.cwd() / 'Assets' / 'images' / 
+            'Starbasesnow.png')
 
         # Ship settings
-        self.ship_file: Path = Path.cwd() / 'Assets' / 'images' / 'ship2(no bg).png'
+        self.ship_file: Path = (Path.cwd() / 'Assets' / 'images' / 
+            'ship2(no bg).png')
         self.ship_w: int = 40
         self.ship_h: int = 60
         self.ship_speed: int = 3
         self.starting_ship_count: int = 3
 
         # Bullet settings
-        self.bullet_file: Path = Path.cwd() / 'Assets' / 'images' / 'laserBlast.png'
+        self.bullet_file: Path = (Path.cwd() / 'Assets' / 'images' / 
+            'laserBlast.png')
         self.laser_sound: Path = Path.cwd() / 'Assets' / 'sound' / 'laser.mp3'
-        self.impact_sound: Path = Path.cwd() / 'Assets' / 'sound' / 'impactSound.mp3'
+        self.impact_sound: Path = (Path.cwd() / 'Assets' / 'sound' / 
+            'impactSound.mp3')
         self.bullet_speed: int = 7
         self.bullet_w: int = 25
         self.bullet_h: int = 80
@@ -91,3 +95,15 @@ class Settings:
         self.fleet_speed: int = 1
         self.fleet_direction: int = 1
         self.fleet_shift_speed: int = 30
+
+        # Button settings
+        self.button_w: int = 200
+        self.button_h: int = 60
+        self.button_color: tuple = (194,2,2)
+
+        # Font settings
+        self.text_color: tuple = (255,255,255)
+        self.button_font_size: int = 40
+        self.HUD_font_size: int = 15
+        self.font_file: Path = (Path.cwd() / 'Assets' / 'Fonts' / 
+            'Silkscreen' / 'Silkscreen-Bold.ttf')
