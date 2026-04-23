@@ -74,7 +74,6 @@ class Settings:
             'ship2(no bg).png')
         self.ship_w: int = 40
         self.ship_h: int = 60
-        self.ship_speed: int = 3
         self.starting_ship_count: int = 3
 
         # Bullet settings
@@ -83,7 +82,6 @@ class Settings:
         self.laser_sound: Path = Path.cwd() / 'Assets' / 'sound' / 'laser.mp3'
         self.impact_sound: Path = (Path.cwd() / 'Assets' / 'sound' / 
             'impactSound.mp3')
-        self.bullet_speed: int = 7
         self.bullet_w: int = 25
         self.bullet_h: int = 80
         self.bullet_amount: int = 5
@@ -92,7 +90,6 @@ class Settings:
         self.alien_file: Path = Path.cwd() / 'Assets' / 'images' / 'enemy_4.png'
         self.alien_w: int = 30
         self.alien_h: int = 30
-        self.fleet_speed: int = 1
         self.fleet_direction: int = 1
         self.fleet_shift_speed: int = 30
 
@@ -107,3 +104,28 @@ class Settings:
         self.HUD_font_size: int = 15
         self.font_file: Path = (Path.cwd() / 'Assets' / 'Fonts' / 
             'Silkscreen' / 'Silkscreen-Bold.ttf')
+        
+
+    def initialize_dynamic_settings(self):
+        """Initializes settings corresponding to the speed of the player and 
+        enemies that determine the difficulty of gameplay"""
+        self.difficulty_scale: float = 1.2
+        self.ship_speed: int = 5
+        self.bullet_speed: int = 7
+        self.fleet_speed: int = 1
+        self.fleet_drop_speed: int = 30
+
+    
+    def increase_difficulty(self):
+        """Increases the game's difficulty by changing the sizes and/or speeds 
+        of objects during gameplay
+
+        Args:
+            level (int): The current level of the active AlienInvasion game
+        """
+        self.ship_speed *= self.difficulty_scale
+        self.bullet_speed *= self.difficulty_scale
+        self.fleet_speed *= self.difficulty_scale
+
+        #BOSS LEVELS: Changes to gameplay ocurring every 5 levels
+        #if level % 5 == 0:

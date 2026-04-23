@@ -54,8 +54,9 @@ class AlienInvasion:
         self.running: bool = True
         self.clock = pygame.time.Clock()
 
-        # Initialize game stats
+        # Initialize game stats and base difficulty
         self.game_stats = GameStats(self.settings.starting_ship_count)
+        self.settings.initialize_dynamic_settings()
 
         # Initialize ship/player object & alien
         self.ship = Ship(self, Arsenal(self))
@@ -108,6 +109,7 @@ class AlienInvasion:
         # Check if entire alien fleet destroyed. Total destruction resets level
         if self.alien_fleet.check_destroyed_status():
             self._reset_level()
+            #self.settings.increase_difficulty()
 
     
     def _check_game_status(self):
@@ -132,7 +134,7 @@ class AlienInvasion:
 
     def restart_game(self):
         """Begins new AlienInvasion game after play button is clicked"""
-        # setting up dynamic settings
+        self.settings.initialize_dynamic_settings()
         # reset game stats
         # update HUD scores
         self._reset_level()
