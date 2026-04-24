@@ -108,8 +108,9 @@ class Settings:
         self.font_file: Path = (Path.cwd() / 'Assets' / 'Fonts' / 
             'Silkscreen' / 'Silkscreen-Bold.ttf')
         
-        # Hi-score tracking file
-        self.scores_file = Path.cwd() / 'Assets' / 'file' / 'scores.json'
+        # Score-tracking settings
+        self.scores_file: Path = Path.cwd() / 'Assets' / 'file' / 'scores.json'
+        self.alien_points: int = 100
         
 
     def initialize_dynamic_settings(self):
@@ -120,19 +121,32 @@ class Settings:
         self.bullet_speed: int = 7
         self.fleet_speed: int = 1
         self.fleet_drop_speed: int = 30
-        self.alien_points: int = 100
 
     
-    def increase_difficulty(self):
-        """Increases the game's difficulty by changing the sizes and/or speeds 
-        of objects during gameplay
+    def increase_difficulty(self, level: int):
+        """Increases the game's difficulty by changing the speeds of objects 
+        during gameplay
 
         Args:
             level (int): The current level of the active AlienInvasion game
         """
-        self.ship_speed *= self.difficulty_scale
-        self.bullet_speed *= self.difficulty_scale
-        self.fleet_speed *= self.difficulty_scale
+        # Points earned increase by level/difficulty
+        self.alien_points: int = 100 + (10*(level-1))
 
-        #BOSS LEVELS: Changes to gameplay ocurring every 5 levels
-        #if level % 5 == 0:
+        # BOSS LEVELS: Fleet makes bigger jumps every 5 levels
+        if level % 5 == 0:
+            self.fleet_drop_speed += 15
+
+        # Dynamic settings reset,
+        # Aliens and Lasers gain permanent speed boost after every boss level
+        elif level % 5 == 1 and level > 5:
+            self.initialize_dynamic_settings()
+            self.fleet_speed += (level // 5)
+            self.bullet_speed += (level // 5)
+        
+        # Level difficulty increase: Speed scaled down for ship and lasers, 
+        # scaled up for alien fleet
+        else:
+            self.ship_speed /= self.difficulty_scale
+            self.bullet_speed /= self.difficulty_scale
+            self.fleet_speed *= self.difficulty_scale
