@@ -1,9 +1,11 @@
 """
 File Name: hud.py
 Author: Tyler D. Collins
-Date: 4/23/2026
+Date: 4/24/2026
 
-Purpose:
+Purpose: The purpose of this file is to create the HUD class/module that 
+formats, displays and updates game scores, current level, and lives remaining
+in the AlienInvasion game.
 """
 
 # Import Necessary Modules w/ workaround for circular imports
@@ -16,8 +18,27 @@ if TYPE_CHECKING:
 class HUD:
     """Facilitates the creation and maintenance of the AlienInvasion game HUD
 
-    Attributes:
+    Args:
+        game (AlienInvasion): Refers to the AlienInvasion game
 
+    Attributes:
+        settings (Settings): Module of predefined specifications used to create
+            and format the HUD that informs the user of game statistics
+        screen (Surface): The screen/window generated to display the game
+        boundaries (Rect): Coordinates/dimensions of the game window boundaries
+        game_stats (GameStats): Contains updated records of game stats
+        font (Font): Font style used for HUD text
+        padding (int): Buffer space between separate HUD objects
+        life_image (Surface): Image of a single life/ship in player's reserves
+        life_rect (Rect): Coordinates/dimensions of a life image on game screen
+        score_image (Surface): Text 'image' of the active game's current score 
+        score_rect (Rect): Coordinates/dimensions of the score image
+        max_score_image (Surface): Text 'image' of the session's hi-score
+        max_score_rect (Rect): Coordinates/dimensions of the max score image
+        hi_score_image (Surface): Text 'image' of the all-time hi-score
+        hi_score_rect (Rect): Coordinates/dimensions of the hi-score image
+        level_image (Surface): Text 'image' of the game's current level
+        level_rect (Rect): Coordinates/dimensions of the level image
     """
     def __init__(self, game: 'AlienInvasion'):
         # Initialize Attributes from AlienInvasion
@@ -30,7 +51,7 @@ class HUD:
         # Initialize HUD text font and boundary spacing
         self.font = pygame.font.Font(self.settings.font_file, 
             self.settings.HUD_font_size)
-        self.padding = 20
+        self.padding: int = 20
 
         # Update HUD
         self.update_scores()
@@ -39,7 +60,7 @@ class HUD:
 
 
     def _setup_life_image(self):
-        """"""
+        """Loads and scales the image of a ship/life to display on HUD"""
         self.life_image = pygame.image.load(self.settings.ship_file)
         self.life_image = pygame.transform.scale(self.life_image, (
             self.settings.ship_w, self.settings.ship_h
@@ -69,7 +90,8 @@ class HUD:
 
     def _update_hi_score(self):
         """Displays a live-updated score counter of the all-time local 
-        hi-score"""
+        hi-score
+        """
         # Format display of all-time local hi-score text
         hi_score_str = f'Hi-Score: {self.game_stats.hi_score: ,.0f}'
         self.hi_score_image = self.font.render(hi_score_str, True, 
@@ -83,7 +105,8 @@ class HUD:
 
     def _update_max_score(self):
         """Displays a live-updated score counter of the hi-score of the current 
-        game session"""
+        game session
+        """
         # Format display of max current session score text
         max_score_str = f'PB Score: {self.game_stats.max_score: ,.0f}'
         self.max_score_image = self.font.render(max_score_str, True, 
@@ -96,27 +119,36 @@ class HUD:
 
 
     def update_level(self):
-        """"""
+        """Displays an updated label of the current level of the active game"""
+        # Format display of level text
         level_str = f'Level: {self.game_stats.level: ,.0f}'
         self.level_image = self.font.render(level_str, True, 
             self.settings.text_color, None)
+        
+        # Place below score
         self.level_rect = self.level_image.get_rect()
         self.level_rect.left = self.score_rect.left
         self.level_rect.top = self.score_rect.bottom + self.padding
 
 
     def _draw_lives(self):
-        """"""
+        """Displays images of the ship that represent the number of lives the 
+        player has remaining in the active game
+        """
+        # Place at top of screen & to left of score/level
         current_x = self.score_rect.left - self.life_rect.width - self.padding
         current_y = self.padding
-        for _ in range(self.game_stats.ships_left):
+
+        # Update to represent current number of lives remaining
+        for lives in range(self.game_stats.ships_left):
             self.screen.blit(self.life_image, (current_x, current_y))
             current_x -= (self.life_rect.width + self.padding)
 
 
     def draw(self):
         """Draws live score counters, current level and lives remaining to HUD 
-        overlay on game screen"""
+        overlay on game screen
+        """
         self.screen.blit(self.score_image, self.score_rect)
         self.screen.blit(self.max_score_image, self.max_score_rect)
         self.screen.blit(self.hi_score_image, self.hi_score_rect)

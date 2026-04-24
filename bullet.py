@@ -1,7 +1,7 @@
 """
 File Name: bullet.py
 Author: Tyler D. Collins
-Date: 4/19/2026
+Date: 4/24/2026
 
 Purpose: The purpose of this file is to create the Bullet class/module that 
 defines how bullets fired from the ship/player are generated, their position
@@ -21,19 +21,18 @@ class Bullet(Sprite):
     game
 
     Args:
-        Sprite (Sprite): Represents group of bullet objects
+        game (AlienInvasion): Refers to the AlienInvasion game
 
     Attributes:
         screen (Surface): The image/space of the game screen
         settings (Settings): Module of predefined specifications used to create
-        bullet sprites and define their behavior
+            bullet sprites and define their behavior
         image (Surface): The on-screen image of the bullet sprite
         rect (Rect): Coordinates/dimensions of the bullet image on game screen
         x_coord (int): 'x' coordinate on the game screen of the top left corner 
-        of the bullet
+            of the bullet
     """
     def __init__(self, game: 'AlienInvasion'):
-        
         # Initialize attributes from Arsenal and AlienInvasion
         super().__init__()
         self.screen = game.screen
@@ -54,7 +53,8 @@ class Bullet(Sprite):
 
     def update(self):
         """Update position of fired bullet(s) as they move horizontally across
-        the screen"""
+        the screen
+        """
         self.x_coord += self.settings.bullet_speed
         self.rect.x = self.x_coord
 

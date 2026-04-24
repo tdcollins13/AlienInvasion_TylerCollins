@@ -1,7 +1,7 @@
 """
 File Name: arsenal.py
 Author: Tyler D. Collins
-Date: 4/19/2026
+Date: 4/24/2026
 
 Purpose: The purpose of this file is to create the Arsenal class/module that 
 defines how the ammo capacity and expended ammo from the ship/player is 
@@ -19,13 +19,16 @@ if TYPE_CHECKING:
 class Arsenal:
     """Represents the ammo reserves of the ship/player in the AlienInvasion game
 
-    Attributes:
+    Args:
         game (AlienInvasion): Refers to the AlienInvasion game
+
+    Attributes:
         settings (Settings): Module of Predefined specifications used to create 
-        ship's arsenal
+            ship's arsenal
         arsenal (Group): Manages group of bullet sprites for the ship to fire
     """
     def __init__(self, game: 'AlienInvasion'):
+        # Initialize Attributes from AlienInvasion
         self.game = game
         self.settings = game.settings
         self.arsenal = pygame.sprite.Group()
@@ -54,7 +57,7 @@ class Arsenal:
         there is ammo left in ship arsenal
 
         Returns:
-            bool: Signals if/when a bullet is successfully fired
+            bool: True when a bullet is successfully fired, otherwise False
         """
         if len(self.arsenal) < self.settings.bullet_amount:
             new_bullet = Bullet(self.game)

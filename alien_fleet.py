@@ -1,7 +1,7 @@
 """
 File Name: alien_fleet.py
 Author: Tyler D. Collins
-Date: 4/19/2026
+Date: 4/24/2026
 
 Purpose: The purpose of this file is to create the AlienFleet class/module that
 defines how the alien fleet structure is generated and facilitates collision 
@@ -17,19 +17,21 @@ if TYPE_CHECKING:
 
 
 class AlienFleet:
-    """Represents the entire alien fleet in the AlienInvasion game
+    """Represents the structure of the alien fleet in the AlienInvasion game
+
+    Args:
+        game (AlienInvasion): Refers to the AlienInvasion game
 
     Attributes
-        game (AlienInvasion): Refers to the AlienInvasion game
         settings (Settings): Module of predefined specifications used to create 
-        the aliens within the fleet
+            the aliens within the fleet
         fleet (Group): Manages group of alien sprites that make up the entire 
-        alien fleet
+            alien fleet
         fleet_direction (int): Variable acting as the 'switch' that determines 
-        whether the alien fleet is moving up or down on-screen
+            whether the alien fleet is moving up or down on-screen
         fleet_shift_speed (int): The relative distance the alien fleet shifts
-        towards the ship/player when the alien fleet hits a boundary and flips
-        movement direction
+            towards the ship/player when the alien fleet hits a boundary and 
+            flips movement direction
     """
     def __init__(self, game: 'AlienInvasion'):
         # Initialize attributes from AlienInvasion
@@ -103,8 +105,8 @@ class AlienFleet:
             fleet_w (int): # of aliens that can fit in a row of the fleet
 
         Returns:
-            tuple: vertical spacing between alien spaces, horizontal spacing 
-            between alien spaces
+            y_offset, x_offset (tuple): vertical spacing between alien spaces, 
+                horizontal spacing between alien spaces
         """
         # Calculate vertical and horizontal dimensions of space filled by fleet
         half_screen: int = (screen_w // 2)
@@ -130,8 +132,8 @@ class AlienFleet:
             screen_w (int): width of the game screen
 
         Returns:
-            tuple: number of aliens that can fill a column, number of aliens 
-            that can fill a row
+            fleet_h, fleet_w (tuple): number of aliens that can fill a column, 
+                number of aliens that can fill a row
         """
         fleet_h = (screen_h // alien_h)
         fleet_w = ((screen_w / 2)//alien_w)
@@ -155,10 +157,10 @@ class AlienFleet:
         """Add all newly created aliens to the fleet Sprite Group
 
         Args:
-            current_y (int): screen 'y' coordinate of the next alien to be 
-            added to the fleet
+            current_y (int): screen 'y' coordinate of the next alien to be
+                added to the fleet
             current_x (int): screen 'x' coordinate of the next alien to be 
-            added to the fleet
+                added to the fleet
         """
         new_alien = Alien(self, current_x, current_y)
         self.fleet.add(new_alien)
@@ -202,15 +204,16 @@ class AlienFleet:
 
         Returns:
             dict: A dictionary containing keys of alien sprites within the fleet
-            that have collided with laser sprites, with their values as lists 
-            of the laser sprites that collided with the alien
+                that have collided with laser sprites, with their values as 
+                lists of the laser sprites that collided with the alien
         """
         return pygame.sprite.groupcollide(self.fleet, other_group, True, True)
 
 
     def check_fleet_reach_end(self):
         """Checks whether alien fleet has reached the screen edge behind the 
-        ship"""
+        ship
+        """
         alien: 'Alien'
         for alien in self.fleet:
             if alien.rect.left <= 0:
@@ -223,6 +226,6 @@ class AlienFleet:
 
         Returns:
             bool: False signifies the fleet still exists, True means fleet has 
-            been destroyed
+                been destroyed
         """
         return not self.fleet

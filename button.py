@@ -1,11 +1,11 @@
 """
 File Name: button.py
 Author: Tyler D. Collins
-Date: 4/22/2026
+Date: 4/24/2026
 
 Purpose: The purpose of this file is to create the Button class/module that 
-generates and formats a 'play' button at the beginning of the AlienInvasion 
-game.
+generates and formats a 'play' button at the beginning of a new game of 
+AlienInvasion.
 """
 
 # Import Necessary Modules
@@ -20,11 +20,18 @@ class Button:
     and end of the AlienInvasion game
 
     Args:
-        game (AlienInvasion):
-        message (str):
+        game (AlienInvasion): Refers to the AlienInvasion game
+        message (str): Text to be displayed on top of the game start button
 
-    Attributes: 
-        
+    Attributes:
+        settings (Settings): Module of predefined specifications used to format 
+            and display the play button before a new game begins
+        screen (Surface): The screen/window generated to display the game
+        boundaries (Rect): Coordinates/dimensions of the game window boundaries
+        font (Font): Font style used for button text
+        rect (Rect): Coordinates/dimensions of the play button
+        message_image (Surface): Text 'image' displayed on top of the play bttn
+        message_image_rect (Rect): Coordinates/dimensions of text image on bttn
     """
     def __init__(self, game: 'AlienInvasion', message: str):
         # Initialize Attributes from AlienInvasion

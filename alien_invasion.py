@@ -1,7 +1,7 @@
 """
 File Name: alien_invasion.py
 Author: Tyler D. Collins
-Date: 4/23/2026
+Date: 4/24/2026
 
 Purpose: This program is the main file in the 'AlienInvasion_TylerCollins'
 repository, which contains the code that runs a complete 2D game using Pygame. 
@@ -27,7 +27,7 @@ class AlienInvasion:
 
     Attributes:
         settings (Settings): Module of predefined specifications used to 
-        generate the game
+            generate the game
         screen (Surface): The screen/window generated to display the game
         bg (Surface): The image used as the background of the game screen
         running (bool): Indicates whether or not the game is currently running
@@ -60,7 +60,7 @@ class AlienInvasion:
         self.HUD = HUD(self)
         self.settings.initialize_dynamic_settings()
 
-        # Initialize ship/player object & alien
+        # Initialize ship/player object & aliens
         self.ship = Ship(self, Arsenal(self))
         self.alien_fleet = AlienFleet(self)
         self.alien_fleet.create_fleet()
@@ -70,17 +70,17 @@ class AlienInvasion:
         self.laser_sound = pygame.mixer.Sound(self.settings.laser_sound)
         self.laser_sound.set_volume(0.7)
 
-        # Set up sound for laser impact with alien
+        # Set up sound for laser impact with aliens
         self.impact_sound = pygame.mixer.Sound(self.settings.impact_sound)
         self.impact_sound.set_volume(0.7)
 
         # Display 'play' button before game begins
         self.play_button = Button(self, 'PLAY')
-        self.game_active = False
+        self.game_active: bool = False
 
 
     def run_game(self):
-        """Responsible for calling the methods that run the game"""
+        """Responsible for calling the methods that run & update the game"""
         # Game Loop
         while self.running == True:
             self._check_events()
@@ -103,7 +103,9 @@ class AlienInvasion:
             self._check_game_status()
 
         # Check for collisions between lasers and aliens
-        collisions = self.alien_fleet.check_collisions(self.ship.arsenal.arsenal)
+        collisions = self.alien_fleet.check_collisions(
+            self.ship.arsenal.arsenal
+            )
         if collisions:
             self.impact_sound.play()
             self.impact_sound.fadeout(500)
@@ -120,14 +122,15 @@ class AlienInvasion:
     
     def _check_game_status(self):
         """Checks for player lives remaining and either resets the level or 
-        ends the game"""
-        # Resets level if there are ships remaining, otherwise game ends
+        ends the game
+        """
+        # Resets failed level if there are ships remaining, otherwise game ends
         if self.game_stats.ships_left > 0:
             self.game_stats.ships_left -= 1
             self._reset_level()
             sleep(0.5)
         else:
-            self.game_active = False
+            self.game_active: bool = False
 
 
     def _reset_level(self):
@@ -145,7 +148,7 @@ class AlienInvasion:
         self.HUD.update_scores()
         self._reset_level()
         self.ship._center_ship()
-        self.game_active = True
+        self.game_active: bool = True
         pygame.mouse.set_visible(False)
 
 
@@ -166,7 +169,7 @@ class AlienInvasion:
 
 
     def _check_events(self):
-        """Checks for keyboard input by player"""
+        """Checks for keyboard/mouse input by player"""
         for event in pygame.event.get():
             # Ends game when game window is closed
             if event.type == pygame.QUIT:
@@ -180,13 +183,15 @@ class AlienInvasion:
             # Check events for when a key is released
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
+            # Check for mouse input on button
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 self._check_button_clicked()
 
 
     def _check_button_clicked(self):
         """Checks for user mouse input to click on the play button at the 
-        beginning/end of the AlienInvasion game"""
+        beginning/end of the AlienInvasion game
+        """
         mouse_pos = pygame.mouse.get_pos()
         if self.play_button.check_clicked(mouse_pos):
             self.restart_game()
@@ -235,6 +240,5 @@ class AlienInvasion:
 
 # AlienInvasion game initialized when program is run
 if __name__ == '__main__':
-    pass
     ai = AlienInvasion()
     ai.run_game()

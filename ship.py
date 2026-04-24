@@ -1,7 +1,7 @@
 """
 File Name: ship.py
 Author: Tyler D. Collins
-Date: 4/19/2026
+Date: 4/24/2026
 
 Purpose: The purpose of this file is to create the Ship class/module that 
 defines how the ship/player object is generated, its position and its 
@@ -19,10 +19,13 @@ if TYPE_CHECKING:
 class Ship:
     """Represents the ship/player object in the AlienInvasion game
 
-    Attributes:
+    Args:
         game (AlienInvasion): Refers to the AlienInvasion game
+        arsenal (Arsenal): Represents the ship's ammo reserves
+
+    Attributes:
         settings (Settings): Module of predefined specifications used to create 
-        the Ship
+            the Ship
         screen (Surface): The image/space of the game screen
         boundaries (Rect): Coordinates/dimensions of the game screen boundaries
 
@@ -60,7 +63,8 @@ class Ship:
 
     def _center_ship(self):
         """Position ship at middle of game screen's left edge at game 
-        start/reset"""
+        start/reset
+        """
         self.rect.midleft = self.boundaries.midleft
         self.y_coord = int(self.rect.y)
 
@@ -73,8 +77,8 @@ class Ship:
 
     def _update_ship_movement(self):
         """Updating ship position when ship is moved by player Movement is 
-        restricted within screen bounds"""
-
+        restricted within screen bounds
+        """
         # Flip movement direction based on which screen boundary is reached
         temp_speed = self.settings.ship_speed
         if self.moving_up and self.rect.top > self.boundaries.top:
@@ -104,9 +108,8 @@ class Ship:
 
         Returns:
             bool: Signals if/when a collision between an alien and the ship 
-            occurs
+                occurs
         """
-
         # Resets ship position upon collision with an alien
         if pygame.sprite.spritecollideany(self, other_group):
             self._center_ship()

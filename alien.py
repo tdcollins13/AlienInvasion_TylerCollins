@@ -1,7 +1,7 @@
 """
 File Name: alien.py
 Author: Tyler D. Collins
-Date: 4/19/2026
+Date: 4/24/2026
 
 Purpose: The purpose of this file is to creat the Alien class/module that 
 defines how the aliens in the alien fleet are generated, their position and 
@@ -20,14 +20,18 @@ class Alien(Sprite):
     """Represents a single alien sprite in the AlienInvasion game
 
     Args:
-        Sprite (Sprite): Represents a group of alien objects
+        fleet (AlienFleet): The complete structure of enemy alien sprites
+        x (float): screen 'x' coordinate of the next alien to be added to the 
+            fleet
+        y (float): screen 'y' coordinate of the next alien to be added to the 
+            fleet
 
     Attributes:
         fleet (AlienFleet): Represents the entire alien fleet
         screen (Surface): The image/space of the game screen
         boundaries (Rect): Coordinates/dimensions of the game screen boundaries
         settings (Settings): Module of predefined specifications used to create 
-        the alien(s)
+            the alien(s)
         image (Surface): The on-screen image of an individual alien
         rect (Rect): Coordinates/dimensions of the alien image
         y_coord (int): 'y' coordinate on game screen of top left corner of alien
@@ -74,7 +78,7 @@ class Alien(Sprite):
 
         Returns:
             bool: False if no aliens are in contact with screen boundaries, 
-            True if alien(s) have reached a screen boundaries
+                True if alien(s) have reached a screen boundaries
         """
         return bool(self.rect.bottom >= self.boundaries.bottom or 
                 self.rect.top <= self.boundaries.top)
