@@ -18,6 +18,7 @@ from ship import Ship
 from arsenal import Arsenal
 from alien_fleet import AlienFleet
 from button import Button
+from hud import HUD
 from time import sleep
 
 
@@ -54,8 +55,9 @@ class AlienInvasion:
         self.running: bool = True
         self.clock = pygame.time.Clock()
 
-        # Initialize game stats and base difficulty
+        # Initialize game stats, HUD, and base difficulty
         self.game_stats = GameStats(self)
+        self.HUD = HUD(self)
         self.settings.initialize_dynamic_settings()
 
         # Initialize ship/player object & alien
@@ -106,13 +108,13 @@ class AlienInvasion:
             self.impact_sound.play()
             self.impact_sound.fadeout(500)
             self.game_stats.update(collisions)
+            self.HUD.update_scores()
 
         # Check if entire alien fleet destroyed. Total destruction resets level
         if self.alien_fleet.check_destroyed_status():
             self._reset_level()
             self.settings.increase_difficulty()
             self.game_stats.update_level()
-            # Update HUD view
 
     
     def _check_game_status(self):
@@ -139,7 +141,7 @@ class AlienInvasion:
         """Begins new AlienInvasion game after play button is clicked"""
         self.settings.initialize_dynamic_settings()
         self.game_stats.reset_stats()
-        # update HUD scores
+        self.HUD.update_scores()
         self._reset_level()
         self.ship._center_ship()
         self.game_active = True
@@ -152,6 +154,7 @@ class AlienInvasion:
         self.screen.blit(self.bg, (0,0))
         self.ship.draw()
         self.alien_fleet.draw()
+        self.HUD.draw()
 
         # Overlay play button before/after game
         if not self.game_active:
@@ -167,6 +170,7 @@ class AlienInvasion:
             # Ends game when game window is closed
             if event.type == pygame.QUIT:
                 self.running: bool = False
+                self.game_stats.save_scores()
                 pygame.quit()
                 sys.exit()
             # Check events for when a key is pressed (during gameplay)
@@ -207,6 +211,7 @@ class AlienInvasion:
         # Ends game and closes game window when 'Q' key is pressed
         elif event.key == pygame.K_q:
             self.running = False
+            self.game_stats.save_scores()
             pygame.quit()
             sys.exit()
 
